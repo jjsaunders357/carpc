@@ -1,0 +1,79 @@
+package car;
+
+import com.pheiffware.lib.geometry.shapes.LineSegment;
+import com.pheiffware.lib.geometry.shapes.Sphere;
+import com.pheiffware.lib.simulation.Simulation;
+
+public class CarEnvironmentSimulation implements Simulation<CarEnvironmentSimulation>
+{
+	// Input can be set to any valid speed for the car based on user input
+	public static final String TARGET_SPEED = "TARGET SPEED";
+
+	// Input can be set to -1, 0 or 1 for turn left, not turning or
+	// turn right. Actual turning determined by car itself.
+	public static final String TURN = "TURN";
+	private final SimulatedCar car;
+	private final Sphere[] spheres;
+	private final LineSegment[] lines;
+	private double targetSpeedInput;
+	private int turningInput;
+
+	public CarEnvironmentSimulation(SimulatedCar car, Sphere[] spheres, LineSegment[] lines)
+	{
+		this.car = car;
+		this.spheres = spheres;
+		this.lines = lines;
+	}
+
+	public CarEnvironmentSimulation(CarEnvironmentSimulation carEnvironmentSimulation)
+	{
+		car = new SimulatedCar(carEnvironmentSimulation.car);
+		// Can cheat and not deep copy these as they are static. This is within
+		// the confines the copyState() contract.
+		spheres = carEnvironmentSimulation.spheres;
+		lines = carEnvironmentSimulation.lines;
+	}
+
+	@Override
+	public void performTimeStep(double elapsedTime)
+	{
+		car.simulateTimeStep(elapsedTime, turningInput, targetSpeedInput);
+
+	}
+
+	@Override
+	public void applyExternalInput(String key, Object value)
+	{
+		if (key.equals(TARGET_SPEED))
+		{
+			targetSpeedInput = (double) value;
+		}
+		else if (key.equals(TURN))
+		{
+			turningInput = (int) value;
+		}
+
+	}
+
+	@Override
+	public CarEnvironmentSimulation copyState()
+	{
+		return new CarEnvironmentSimulation(this);
+	}
+
+	public final SimulatedCar getCar()
+	{
+		return car;
+	}
+
+	public final Sphere[] getSpheres()
+	{
+		return spheres;
+	}
+
+	public final LineSegment[] getLines()
+	{
+		return lines;
+	}
+
+}
