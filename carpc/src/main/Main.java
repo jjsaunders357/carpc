@@ -1,11 +1,11 @@
 package main;
 
 import gui.LiveCarEnvironmentPanel;
-import car.CarEnvironmentSimulation;
+import car.CarSimulation;
 import car.SimulatedCar;
 
 import com.pheiffware.lib.geometry.Vec3D;
-import com.pheiffware.lib.geometry.shapes.LineSegment;
+import com.pheiffware.lib.geometry.shapes.BaseLineSegment;
 import com.pheiffware.lib.geometry.shapes.Sphere;
 import com.pheiffware.lib.log.Log;
 import com.pheiffware.lib.log.PCLogHandler;
@@ -26,18 +26,18 @@ public class Main
 				new Vec3D[] { new Vec3D(11, -7, 0), new Vec3D(11, 0, 0), new Vec3D(11, 7, 0) }, 
 				new Vec3D(0, 0, 0), 
 				Math.PI * 0 / 180.0,
-				0.01,
-				0.02,
+				24*3,
+				24*7,
 				40);
 		Sphere[] spheres = new Sphere[]
 		{ new Sphere(new Vec3D(50, 50, 0), 10.0), new Sphere(new Vec3D(-30, 70, 0), 20.0), new Sphere(new Vec3D(80, -80, 0), 40.0),
 				new Sphere(new Vec3D(-50, -50, 0), 20.0), };
 
-		LineSegment[] lines = new LineSegment[]
-		{ new LineSegment(60, -50, 80, 50) };
+		BaseLineSegment[] lines = new BaseLineSegment[]
+		{ new BaseLineSegment(60, -50, 80, 50) };
 
 		// @formatter:on
-		CarEnvironmentSimulation simulation = new CarEnvironmentSimulation(car, spheres, lines);
+		CarSimulation simulation = new CarSimulation(car, spheres, lines);
 		liveCarEnvironmentPanel = new LiveCarEnvironmentPanel(800, 800, 0.01, simulation);
 		liveCarEnvironmentPanel.start();
 		new MainFrame("Car Panel", liveCarEnvironmentPanel);

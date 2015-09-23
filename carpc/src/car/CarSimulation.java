@@ -1,10 +1,10 @@
 package car;
 
-import com.pheiffware.lib.geometry.shapes.LineSegment;
+import com.pheiffware.lib.geometry.shapes.BaseLineSegment;
 import com.pheiffware.lib.geometry.shapes.Sphere;
 import com.pheiffware.lib.simulation.Simulation;
 
-public class CarEnvironmentSimulation implements Simulation<CarEnvironmentSimulation>
+public class CarSimulation implements Simulation<CarSimulationState>
 {
 	// Input can be set to any valid speed for the car based on user input
 	public static final String TARGET_SPEED = "TARGET SPEED";
@@ -14,18 +14,18 @@ public class CarEnvironmentSimulation implements Simulation<CarEnvironmentSimula
 	public static final String TURN = "TURN";
 	private final SimulatedCar car;
 	private final Sphere[] spheres;
-	private final LineSegment[] lines;
+	private final BaseLineSegment[] lines;
 	private double targetSpeedInput;
 	private int turningInput;
 
-	public CarEnvironmentSimulation(SimulatedCar car, Sphere[] spheres, LineSegment[] lines)
+	public CarSimulation(SimulatedCar car, Sphere[] spheres, BaseLineSegment[] lines)
 	{
 		this.car = car;
 		this.spheres = spheres;
 		this.lines = lines;
 	}
 
-	public CarEnvironmentSimulation(CarEnvironmentSimulation carEnvironmentSimulation)
+	public CarSimulation(CarSimulation carEnvironmentSimulation)
 	{
 		car = new SimulatedCar(carEnvironmentSimulation.car);
 		// Can cheat and not deep copy these as they are static. This is within
@@ -56,9 +56,9 @@ public class CarEnvironmentSimulation implements Simulation<CarEnvironmentSimula
 	}
 
 	@Override
-	public CarEnvironmentSimulation copyState()
+	public CarSimulationState copyState()
 	{
-		return new CarEnvironmentSimulation(this);
+		return new CarSimulationState(this);
 	}
 
 	public final SimulatedCar getCar()
@@ -71,7 +71,7 @@ public class CarEnvironmentSimulation implements Simulation<CarEnvironmentSimula
 		return spheres;
 	}
 
-	public final LineSegment[] getLines()
+	public final BaseLineSegment[] getLines()
 	{
 		return lines;
 	}

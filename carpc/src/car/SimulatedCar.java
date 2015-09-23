@@ -1,7 +1,5 @@
 package car;
 
-import java.util.Random;
-
 import com.pheiffware.lib.geometry.Vec3D;
 
 /**
@@ -12,15 +10,10 @@ import com.pheiffware.lib.geometry.Vec3D;
  */
 public class SimulatedCar extends Car
 {
-	// TODO: Useless as the time steps ended up being too small.
-	private static final double accRandomness = 0.1;
-	private static final double turnRandomness = 0.1;
-	private static final double speedRandomness = 0.1;
 	// Rate of car acceleration/deceleration
 	private final double acceleration;
 	private final double deceleration;
 	private final double turningRadius;
-	private final Random random = new Random();
 	private double speed = 0.0;
 
 	public SimulatedCar(double length, double width, double[] sensorAngles, Vec3D[] sensorPositionOffsets, Vec3D center, double angle,
@@ -32,6 +25,10 @@ public class SimulatedCar extends Car
 		this.turningRadius = turningRadius;
 	}
 
+	/**
+	 * Does not copy actual sensor distances
+	 * @param car
+	 */
 	public SimulatedCar(SimulatedCar car)
 	{
 		super(car);
@@ -48,33 +45,37 @@ public class SimulatedCar extends Car
 	 */
 	public void simulateTimeStep(double elapsedTime, int turningInput, double targetSpeedInput)
 	{
-		// Speed will not be perfect. This is simulated by randomly changing the
-		// target speed.
-		targetSpeedInput *= (1 + random.nextDouble() * speedRandomness);
+		// acceleration (will be negative for deceleration)
 		final double acc;
 		if (targetSpeedInput > speed)
 		{
-			// Acceleration will not be perfect. This is simulated by randomly
-			// changing the acceleration
-			acc = acceleration * (1 + random.nextDouble() * accRandomness);
+			acc = acceleration;
 		}
 		else
 		{
-			// Deceleration will not be perfect. This is simulated by randomly
-			// changing the acceleration
-			acc = -deceleration * (1 + random.nextDouble() * accRandomness);
+			acc = -deceleration;
 		}
+		// Time spent accelerating
 		double accTime = (targetSpeedInput - speed) / acc;
-		final double coastTime;
-		if (accTime < elapsedTime)
+
+		if (accTime > elapsedTime)
 		{
-			coastTime = elapsedTime - accTime;
+			accTime = elapsedTime;
 		}
-		else
-		{
-			coastTime = 0;
-		}
-		double totalForwardTranslation = speed * accTime + acc * accTime * accTime / 2 + targetSpeedInput * coastTime;
+
+		// Speed of the car at the end of the time step
+		double finalSpeed = speed + acc * accTime;
+
+		// The time spent moving at the final velocity for this time step.
+		final double finalSpeedTime = elapsedTime - accTime;
+
+		// Total translation, this is made of three components:
+		// 1. Vi * ta (ta=time accelerating)
+		// 2. 1/2 *a * ta^2 (ta=time accelerating)
+		// 3. vf * tf (tf=time at final speed)
+		double totalForwardTranslation = speed * accTime + acc * accTime * accTime / 2 + finalSpeed * finalSpeedTime;
+		speed = finalSpeed;
+
 		if (turningInput == 0)
 		{
 			translateForward(totalForwardTranslation);
@@ -82,7 +83,7 @@ public class SimulatedCar extends Car
 		else
 		{
 			// Assume translation happens around circle of given turning radius (with randomness applied)
-			double totalRotationRadians = turningInput * totalForwardTranslation / (turningRadius * (1 + random.nextDouble() * turnRandomness));
+			double totalRotationRadians = turningInput * totalForwardTranslation / (turningRadius);// * (1 + random.nextDouble() * turnRandomness));
 
 			// Center of rotation perpendicular to car's angle at turning radius distance
 			double angleToCenterOfRotation = angle + turningInput * Math.PI / 2;
