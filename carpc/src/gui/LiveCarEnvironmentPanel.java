@@ -8,7 +8,7 @@ import car.CarSimulationState;
 import car.Sensor;
 import car.SimulatedCar;
 
-import com.pheiffware.lib.geometry.shapes.BaseLineSegment;
+import com.pheiffware.lib.geometry.shapes.SimpleLineSegment;
 import com.pheiffware.lib.geometry.shapes.Sphere;
 import com.pheiffware.lib.simulation.RealTimeSimulationRunner;
 import com.pheiffware.lib.swing.graphics.G2D;
@@ -81,7 +81,7 @@ public class LiveCarEnvironmentPanel extends GraphicDebugPanel2D
 		{
 			G2DRender.render(g2d, sphere);
 		}
-		for (BaseLineSegment line : state.getLines())
+		for (SimpleLineSegment line : state.getLines())
 		{
 			G2DRender.render(g2d, line);
 		}

@@ -1,6 +1,6 @@
 package car;
 
-import com.pheiffware.lib.geometry.shapes.BaseLineSegment;
+import com.pheiffware.lib.geometry.shapes.LineSegment;
 import com.pheiffware.lib.geometry.shapes.Sphere;
 import com.pheiffware.lib.simulation.Simulation;
 
@@ -14,11 +14,11 @@ public class CarSimulation implements Simulation<CarSimulationState>
 	public static final String TURN = "TURN";
 	private final SimulatedCar car;
 	private final Sphere[] spheres;
-	private final BaseLineSegment[] lines;
+	private final LineSegment[] lines;
 	private double targetSpeedInput;
 	private int turningInput;
 
-	public CarSimulation(SimulatedCar car, Sphere[] spheres, BaseLineSegment[] lines)
+	public CarSimulation(SimulatedCar car, Sphere[] spheres, LineSegment[] lines)
 	{
 		this.car = car;
 		this.spheres = spheres;
@@ -71,7 +71,7 @@ public class CarSimulation implements Simulation<CarSimulationState>
 		return spheres;
 	}
 
-	public final BaseLineSegment[] getLines()
+	public final LineSegment[] getLines()
 	{
 		return lines;
 	}

@@ -1,8 +1,8 @@
 package car;
 
-import main.Geocalc;
-
-import com.pheiffware.lib.geometry.shapes.BaseLineSegment;
+import com.pheiffware.lib.geometry.Geocalc;
+import com.pheiffware.lib.geometry.shapes.LineSegment;
+import com.pheiffware.lib.geometry.shapes.Sphere;
 
 /**
  * Same as CarSimulation with the distance of every sensor on the car to the nearest object.
@@ -32,15 +32,15 @@ public class CarSimulationState extends CarSimulation
 		{
 			Sensor sensor = sensors[i];
 			sensorDistances[i] = MAX_SENSOR_DISTANCE;
-			// for (Sphere sphere : getSpheres())
-			// {
-			// double distance = Geocalc.distanceRayToSphere(sphere, sensor.getPosition(), sensor.getDirection());
-			// if (distance < sensorDistances[i])
-			// {
-			// sensorDistances[i] = distance;
-			// }
-			// }
-			for (BaseLineSegment line : getLines())
+			for (Sphere sphere : getSpheres())
+			{
+				double distance = Geocalc.distanceRayToSphere(sphere, sensor.getPosition(), sensor.getDirection());
+				if (distance < sensorDistances[i])
+				{
+					sensorDistances[i] = distance;
+				}
+			}
+			for (LineSegment line : getLines())
 			{
 				double distance = Geocalc.distanceRayToLineSegment2D(line, sensor.getPosition(), sensor.getDirection());
 				if (distance < sensorDistances[i])

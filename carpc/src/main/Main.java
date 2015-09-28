@@ -5,7 +5,7 @@ import car.CarSimulation;
 import car.SimulatedCar;
 
 import com.pheiffware.lib.geometry.Vec3D;
-import com.pheiffware.lib.geometry.shapes.BaseLineSegment;
+import com.pheiffware.lib.geometry.shapes.LineSegment;
 import com.pheiffware.lib.geometry.shapes.Sphere;
 import com.pheiffware.lib.log.Log;
 import com.pheiffware.lib.log.PCLogHandler;
@@ -33,8 +33,8 @@ public class Main
 		{ new Sphere(new Vec3D(50, 50, 0), 10.0), new Sphere(new Vec3D(-30, 70, 0), 20.0), new Sphere(new Vec3D(80, -80, 0), 40.0),
 				new Sphere(new Vec3D(-50, -50, 0), 20.0), };
 
-		BaseLineSegment[] lines = new BaseLineSegment[]
-		{ new BaseLineSegment(60, -50, 80, 50) };
+		LineSegment[] lines = new LineSegment[]
+		{ new LineSegment(60, -50, 80, 50) };
 
 		// @formatter:on
 		CarSimulation simulation = new CarSimulation(car, spheres, lines);
