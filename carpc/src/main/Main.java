@@ -7,7 +7,7 @@ import car.SimulatedCar;
 import com.pheiffware.lib.geometry.Vec3D;
 import com.pheiffware.lib.geometry.shapes.LineSegment;
 import com.pheiffware.lib.geometry.shapes.Sphere;
-import com.pheiffware.lib.log.Log;
+import com.pheiffware.lib.log.PLog;
 import com.pheiffware.lib.log.PCLogHandler;
 import com.pheiffware.lib.swing.MainFrame;
 
@@ -17,7 +17,7 @@ public class Main
 
 	public static void main(String[] args)
 	{
-		Log.install(new PCLogHandler());
+		PLog.install(new PCLogHandler());
 		// @formatter:off
 		SimulatedCar car = new SimulatedCar(
 				24, 
